@@ -1,0 +1,25 @@
+{
+  "name": "demojs",
+  "description": "demo",
+  "main": "index.js",
+  "authors": [
+    "Zhou Xiumin"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "demo;javascript"
+  ],
+  "homepage": "https://github.com/zhouxiumin/demojs",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "echarts": "^3.6.2",
+    "jquery": "^3.2.1",
+    "bootstrap": "^3.3.7"
+  }
+}

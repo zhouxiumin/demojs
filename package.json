@@ -1,0 +1,27 @@
+{
+  "name": "demojs",
+  "version": "1.0.0",
+  "description": "demo ",
+  "main": "index.js",
+  "scripts": {
+    "start": "browser-sync start --server public --files \"public/**\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhouxiumin/demojs.git"
+  },
+  "keywords": [
+    "demo;javascript"
+  ],
+  "author": "Zhou Xiumin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zhouxiumin/demojs/issues"
+  },
+  "homepage": "https://github.com/zhouxiumin/demojs#readme",
+  "dependencies": {
+    "bower": "^1.8.0",
+    "browser-sync": "^2.18.12"
+  }
+}
