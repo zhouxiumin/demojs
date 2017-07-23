@@ -75,16 +75,16 @@ myChart.on('click', function (params) {
     if (!params.dataType || params.dataType !== 'node') {
         return;
     }
-    console.log(params);
+    // console.log(params);
     var option = myChart.getOption();
     var series = option.series;
-    console.log(series);
+    // console.log(series);
     if (preDataIndex === null) {
         series[0].focusNodeAdjacency = false;
         myChart.setOption({
             series: series
         });
-        console.log(myChart);
+        // console.log(myChart);
         focusNode(myChart, params);
 
 
@@ -114,9 +114,7 @@ function focusNode(ec, payload) {
     var seriesModel = model.getSeriesByIndex(0);
     var data = seriesModel.getData();
     var dataIndex = payload.dataIndex;
-
     var el = data.getItemGraphicEl(dataIndex);
-    console.log(el);
 
     if (!el) {
         return;
@@ -162,8 +160,5 @@ function focusNode(ec, payload) {
 
         var node = graph.getNodeByIndex(dataIndex);
         fadeInItem(node, nodeOpacityPath);
-
     }
-
-
 }
