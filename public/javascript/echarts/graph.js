@@ -22,7 +22,6 @@ $.getJSON('/server/npmdepgraph.min10.json', function (json) {
                 $.get('/server/npmdepgraph.min10.json', function (content) {
                     callback(ticket, "i:" + Math.random()*100);
                 });
-                console.log(callback);
                 return 'loading';
             }
         },
@@ -70,3 +69,101 @@ $.getJSON('/server/npmdepgraph.min10.json', function (json) {
         ]
     }, true);
 });
+var preDataIndex = null;
+
+myChart.on('click', function (params) {
+    if (!params.dataType || params.dataType !== 'node') {
+        return;
+    }
+    console.log(params);
+    var option = myChart.getOption();
+    var series = option.series;
+    console.log(series);
+    if (preDataIndex === null) {
+        series[0].focusNodeAdjacency = false;
+        myChart.setOption({
+            series: series
+        });
+        console.log(myChart);
+        focusNode(myChart, params);
+
+
+        preDataIndex = params.dataIndex;
+    } else if (preDataIndex === params.dataIndex) {
+        series[0].focusNodeAdjacency = true;
+        myChart.setOption({
+            series: series
+        });
+
+
+        preDataIndex = null;
+    }
+});
+
+// **********************************************
+// ****************核心代码***********************
+// **********************************************
+// **********************************************
+var nodeOpacityPath = ['itemStyle', 'normal', 'opacity'];
+var lineOpacityPath = ['lineStyle', 'normal', 'opacity'];
+function getItemOpacity(item, opacityPath) {
+    return item.getVisual('opacity') || item.getModel().get(opacityPath);
+}
+function focusNode(ec, payload) {
+    var model = ec.getModel();
+    var seriesModel = model.getSeriesByIndex(0);
+    var data = seriesModel.getData();
+    var dataIndex = payload.dataIndex;
+
+    var el = data.getItemGraphicEl(dataIndex);
+    console.log(el);
+
+    if (!el) {
+        return;
+    }
+
+    var graph = data.graph;
+    var dataType = el.dataType;
+
+    function fadeOutItem(item, opacityPath) {
+        var opacity = getItemOpacity(item, opacityPath);
+        var el = item.getGraphicEl();
+        if (opacity === null) {
+            opacity = 1;
+        }
+
+        el.traverse(function (child) {
+            child.trigger('normal');
+            if (child.type !== 'group') {
+                child.setStyle('opacity', opacity * 0.1);
+            }
+        });
+    }
+
+    function fadeInItem(item, opacityPath) {
+        var opacity = getItemOpacity(item, opacityPath);
+        var el = item.getGraphicEl();
+
+        el.traverse(function (child) {
+            child.trigger('emphasis');
+            if (child.type !== 'group') {
+                child.setStyle('opacity', opacity);
+            }
+        });
+    }
+
+    if (dataIndex !== null && dataType !== 'edge') {
+        graph.eachNode(function (node) {
+            fadeOutItem(node, nodeOpacityPath);
+        });
+        graph.eachEdge(function (edge) {
+            fadeOutItem(edge, lineOpacityPath);
+        });
+
+        var node = graph.getNodeByIndex(dataIndex);
+        fadeInItem(node, nodeOpacityPath);
+
+    }
+
+
+}
