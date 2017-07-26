@@ -300,20 +300,15 @@ var myChart = echarts.init(document.getElementById('main'));
 window.onresize = function () {
     myChart.resize();
 };
-
 myChart.setOption(option);
-console.log(myChart);
 
 var preDataIndex = null;
 myChart.on('click', function (params) {
     if (!params.componentSubType || params.componentSubType !== 'effectScatter') {
         return;
     }
-    // console.log(params);
     if (preDataIndex === null) {
         focusNode(myChart, params);
-
-
         preDataIndex = params.dataIndex;
     } else if (preDataIndex === params.dataIndex) {
         myChart.dispatchAction({
@@ -326,7 +321,6 @@ myChart.on('click', function (params) {
 
 function focusNode(ec, payload) {
     var model = ec.getModel();
-
     model.eachSeries(function (seriesModel) {
         var data;
         if (seriesModel.seriesIndex === payload.seriesIndex) {
@@ -351,7 +345,6 @@ function focusNode(ec, payload) {
                     }
                 })
             }
-
         }else {
             if (seriesModel.name === payload.seriesName &&
                 seriesModel.subType === 'lines') {
@@ -364,5 +357,4 @@ function focusNode(ec, payload) {
             }
         }
     });
-
 }
