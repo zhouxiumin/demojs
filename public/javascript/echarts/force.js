@@ -49,6 +49,7 @@ $.get('/server/les-miserables.gexf', function (xml) {
                 layout: 'force',
                 data: graph.nodes,
                 links: graph.links,
+
                 categories: categories,
                 roam: true,
                 label: {
