@@ -42,7 +42,7 @@ $.get('/server/simple.gexf', function (xml) {
             hideDelay: 500,
             formatter: function (params, ticket, callback) {
 
-                return '菜单:<br/> <a href="http://www.baidu.com">百度</a>'
+                return '菜单:<br/> <button onclick="clickBtn()"> 点击</button>'
             }
         },
         legend: [{
@@ -78,6 +78,9 @@ $.get('/server/simple.gexf', function (xml) {
     myChart.setOption(option);
 }, 'xml');
 
+function clickBtn() {
+    console.log('hello');
+}
 //////////////////////////////////////
 //////////////////////////////////////
 //////////////////////////////////////
