@@ -7,7 +7,6 @@ window.onresize = function () {
     myChart.resize();
 };
 myChart.showLoading();
-myChart.showLoading();
 $.get('/server/simple.gexf', function (xml) {
     myChart.hideLoading();
 
@@ -80,6 +79,11 @@ $.get('/server/simple.gexf', function (xml) {
 
 function clickBtn() {
     console.log('hello');
+    var option = myChart.getOption();
+    var series = option.series;
+
+    console.log(series);
+
 }
 //////////////////////////////////////
 //////////////////////////////////////
