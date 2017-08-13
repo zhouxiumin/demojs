@@ -37,8 +37,13 @@ $.get('/server/simple.gexf', function (xml) {
         tooltip: {
             trigger: 'item',
             enterable: true,
+            triggerOn: 'mousemove',
+            position: 'right',
             hideDelay: 500,
-            formatter: '菜单:<br/><a href="http://www.baidu.com">百度</a>'
+            formatter: function (params, ticket, callback) {
+
+                return '菜单:<br/> <a href="http://www.baidu.com">百度</a>'
+            }
         },
         legend: [{
             // selectedMode: 'single',
