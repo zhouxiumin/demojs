@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>本地存储测试</title>
+</head>
+<body>
+<h1>本地存储测试</h1>
+<form>
+    <input type="text" name="name" id="name" title="输入"/>
+    <button id="btn" type="button" name="btn">确定</button>
+    <p>
+        <span>name:</span>
+        <span id="result"></span>
+    </p>
+</form>
+
+<div>
+    <a target="_blank" href="http://www.w3school.com.cn/html5/html_5_webstorage.asp">localstorage</a>
+</div>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        if (localStorage.name) {
+            $("#result").text(localStorage.name);
+        }
+
+        $("#btn").click(function(){
+            var name =$("#name").val();
+            console.log(name);
+            localStorage.name = name;
+            $("#result").text(name);
+        });
+    });
+</script>
+</body>
+</html>
