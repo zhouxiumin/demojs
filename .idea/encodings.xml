@@ -3,5 +3,6 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/public/javascript/binaryImage.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/public/javascript/reco.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../ucweb/src/main/webapp/js/reco-.js" charset="GBK" />
   </component>
 </project>
