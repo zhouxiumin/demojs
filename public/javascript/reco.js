@@ -6,7 +6,6 @@ function recoImg(cvsIn, resname, debug) {
     //灰度化
     grayProcessing(canvasData);
 
-
     var sobelData = Sobel(canvasData);
     var sobelImageData = sobelData.toImageData();
     var canvas,ctx;
