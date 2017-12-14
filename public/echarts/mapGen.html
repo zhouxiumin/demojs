@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="Shortcut Icon" href="favicon.ico">
+    <meta charset="UTF-8">
+    <title>地图数据生成</title>
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/style/site.css">
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">MAPGEN</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="index.html">Home <span class="sr-only">(current)</span></a></li>
+                <li><a href="test.html">test</a></li>
+                <li><a href="teststatic.html">test</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</nav>
+<div class="container">
+    <div class="row">
+        <h1>地图测试</h1>
+
+        <form class="form-inline">
+            <div class="form-group">
+                <div>
+                    <canvas id="canvas" width="947" height="601"></canvas>
+                </div>
+
+                <div>
+                    <canvas id="canvashide" width="450" height="700"></canvas>
+                </div>
+
+                <div>
+                    <div id="message">i</div>
+                </div>
+                <div>
+                    <div id="scanResult">result</div>
+                </div>
+                <canvas id="ctx" width="450" height="150"></canvas>
+
+                <button id="close" type="button" class="btn btn-default">关闭</button>
+                <button id="capture" type="button" class="btn btn-primary">识别</button>
+                <!-- Button trigger modal -->
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="row footer-bottom">
+        <ul class="list-inline text-center">
+            <li>copyright &copy; NJUST</li>
+        </ul>
+    </div>
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascript/sobel.js"></script>
+<script src="/javascript/binaryImage.js"></script>
+<script src="/javascript/reco-.js"></script>
+<script>
+    $(document).ready(function () {
+        var canvas = $("#canvas")[0];
+        var cxt=canvas.getContext("2d");
+        var img=new Image({});
+        img.src="/img/20171207182508.jpg";
+        img.onload = function () //确保图片已经加载完毕
+        {
+            cxt.drawImage(img,0,0);
+        };
+        var canvashide = $("#canvashide")[0];
+
+        $("#scan").click(function () {
+            $("#myModal").modal('toggle')
+        });
+
+        $("#capture").click(function () {
+            recoImg(canvas, "#scanResult");
+        });
+
+        $("#close").click(function () {
+            console.log("close");
+            $("#myModal").modal('toggle')
+        })
+
+    });
+
+</script>
+</body>
+</html>
