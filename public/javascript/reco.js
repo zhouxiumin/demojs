@@ -8,20 +8,21 @@ function recoImg(cvsIn, resname, debug) {
     //灰度化
     grayProcessing(canvasData);
 
-    var sobelData = Sobel(canvasData);
-    var sobelImageData = sobelData.toImageData();
+    // var sobelData = Sobel(canvasData);
+    // var sobelImageData = sobelData.toImageData();
     var canvas,ctx;
-    if (debug) {
+    if (false) {
         canvas = document.getElementById('test1');
         ctx = canvas.getContext('2d');
-        ctx.putImageData(sobelImageData, 0, 0);
+        ctx.putImageData(canvasData, 0, 0);
     }
     console.log("resolution: "+resolution);
-    var algo11 = OTSUAlgorithm(sobelImageData);//存储结果
-    sobelImageData = algo11[0];
+    var algo11 = OTSUAlgorithm(canvasData);//存储结果
+    var sobelImageData = algo11[0];
 
     // 处理阴影
     var searchSobel = MergeSmallClusters(BFSearch(sobelImageData), width, height);
+    // var searchSobel = MergeSmallClusters(BFSearch(sobelImageData), width, height);
     var clusterSobel = searchSobel[0];
     var seqSobel = searchSobel[1];
     var setsSobel = genSets(clusterSobel,seqSobel,width,height);
@@ -107,7 +108,7 @@ function BFSearch(canvasData){
         for (j = 0; j < canvasData.width; j++) {
             ids = j + i * canvasData.width;
             var point = canvasData.data[ids * 4];
-            matrix.data[ids] = (point === 0) ? 1 : 0;
+            matrix.data[ids] = (point === 255) ? 1 : 0;
             cluster[ids] = matrix.data[ids];
             flags[ids] = false;
         }
@@ -129,7 +130,7 @@ function BFSearch(canvasData){
                 while (queue.length !== 0) {
                     var k, nj, ni, nids;
                     var pot = queue.shift();
-                    for (k = 0; k < 4; k++) {
+                    for (k = 0; k < dirs.length; k++) {
                         ni = pot[0] + dirs[k][0];
                         nj = pot[1] + dirs[k][1];
                         nids = nj + ni * width;
