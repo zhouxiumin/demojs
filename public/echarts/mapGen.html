@@ -43,9 +43,13 @@
                 <div>
                     <canvas id="canvas" width="947" height="601"></canvas>
                 </div>
+                <button id="capture" type="button" class="btn btn-primary">识别</button>
 
                 <div>
-                    <canvas id="canvashide" width="450" height="700"></canvas>
+                    <canvas id="test1" width="947" height="601"></canvas>
+                </div>
+                <div>
+                    <canvas id="test2" width="947" height="601"></canvas>
                 </div>
 
                 <div>
@@ -56,9 +60,6 @@
                 </div>
                 <canvas id="ctx" width="450" height="150"></canvas>
 
-                <button id="close" type="button" class="btn btn-default">关闭</button>
-                <button id="capture" type="button" class="btn btn-primary">识别</button>
-                <!-- Button trigger modal -->
 
             </div>
         </form>
@@ -76,7 +77,7 @@
 <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/javascript/sobel.js"></script>
 <script src="/javascript/binaryImage.js"></script>
-<script src="/javascript/reco-.js"></script>
+<script src="/javascript/reco.js"></script>
 <script>
     $(document).ready(function () {
         var canvas = $("#canvas")[0];
@@ -89,18 +90,9 @@
         };
         var canvashide = $("#canvashide")[0];
 
-        $("#scan").click(function () {
-            $("#myModal").modal('toggle')
-        });
-
         $("#capture").click(function () {
-            recoImg(canvas, "#scanResult");
+            recoImg(canvas, "#scanResult", true);
         });
-
-        $("#close").click(function () {
-            console.log("close");
-            $("#myModal").modal('toggle')
-        })
 
     });
 
