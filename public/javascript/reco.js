@@ -27,6 +27,9 @@ function recoImg(cvsIn, resname, debug) {
     var seqSobel = searchSobel[1];
     var setsSobel = genSets(clusterSobel,seqSobel,width,height);
     setsSobel.filterSobelSimple();
+    console.log(searchSobel);
+    console.log(setsSobel);
+    drawCluster(clusterSobel, "test", seqSobel);
     if(setsSobel.length<=2){
         if(setsSobel.length<=1){
             $(resname).text("unable to parse Image");
@@ -53,7 +56,7 @@ function recoImg(cvsIn, resname, debug) {
         canvas = document.getElementById('test2');
         ctx = canvas.getContext('2d');
         ctx.putImageData(canvasData, 0, 0);
-        drawCluster(clusterSobel, "test", seqSobel);
+        // drawCluster(clusterSobel, "test", seqSobel);
     }
 }
 
@@ -72,7 +75,7 @@ function BFSearch(canvasData){
         for (j = 0; j < canvasData.width; j++) {
             ids = j + i * canvasData.width;
             var point = canvasData.data[ids * 4];
-            matrix.data[ids] = (point == 0) ? 1 : 0;
+            matrix.data[ids] = (point === 0) ? 1 : 0;
             cluster[ids] = matrix.data[ids];
             flags[ids] = false;
         }
@@ -85,19 +88,19 @@ function BFSearch(canvasData){
     for (i = 0; i < height; i++) {
         for (j = 0; j < width; j++) {
             ids = j + i * width;
-            if (matrix.data[ids] == 1 && !flags[ids]) {
+            if (matrix.data[ids] === 1 && !flags[ids]) {
                 seq++;
                 flags[ids] = true;
                 cluster[ids] = seq;
                 queue.push([i, j]);
-                while (queue.length != 0) {
+                while (queue.length !== 0) {
                     var k, nj, ni, nids;
                     var pot = queue.shift();
                     for (k = 0; k < 4; k++) {
                         ni = pot[0] + dirs[k][0];
                         nj = pot[1] + dirs[k][1];
                         nids = nj + ni * width;
-                        if ((ni < height) && (ni >= 0) && (nj < width) && (nj >= 0) && (matrix.data[nids] == 1) && (!flags[nids])) {
+                        if ((ni < height) && (ni >= 0) && (nj < width) && (nj >= 0) && (matrix.data[nids] === 1) && (!flags[nids])) {
                             flags[nids] = true;
                             cluster[nids] = seq;
                             queue.push([ni, nj]);
@@ -125,7 +128,7 @@ function BFSearchWithMask(canvasData,mask){
             ids = j + i * canvasData.width;
             var point = canvasData.data[ids * 4];
             var mk = mask[ids];
-            matrix.data[ids] = (point == 0 &&mk==255) ? 1 : 0;
+            matrix.data[ids] = (point === 0 &&mk===255) ? 1 : 0;
             cluster[ids] = matrix.data[ids];
             flags[ids] = false;
 
