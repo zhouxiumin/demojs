@@ -17,12 +17,11 @@ function recoImg(cvsIn, resname, debug) {
         ctx.putImageData(sobelImageData, 0, 0);
     }
     console.log("resolution: "+resolution);
-    console.log(sobelImageData);
     var algo11 = OTSUAlgorithm(sobelImageData);//存储结果
     sobelImageData = algo11[0];
 
     // 处理阴影
-    var searchSobel = BFSearch(sobelImageData);
+    var searchSobel = MergeSmallClusters(BFSearch(sobelImageData), width, height);
     var clusterSobel = searchSobel[0];
     var seqSobel = searchSobel[1];
     var setsSobel = genSets(clusterSobel,seqSobel,width,height);
@@ -40,7 +39,7 @@ function recoImg(cvsIn, resname, debug) {
         console.log("continue filter sobel");
         setsSobel.SelectAreaSobel()
     }
-
+/*
     //得到数字区域的大小：
     var digialArea = setsSobel.data[1].area;
     setsSobel.show(true);
@@ -58,6 +57,38 @@ function recoImg(cvsIn, resname, debug) {
         ctx.putImageData(canvasData, 0, 0);
         // drawCluster(clusterSobel, "test", seqSobel);
     }
+    */
+}
+
+function MergeSmallClusters(searchResult ,width, height) {
+    var cluster = searchResult[0];
+    var seq = searchResult[1];
+    var counts = searchResult[2];
+    var mapToChar = {0:0};
+    var count = 1;
+    var i,j;
+    var seq_new =0;
+    var counts_new = [];
+    counts_new[seq_new]=0;
+    for(i=1;i<=seq;i++){
+        if(counts[i]<20){
+            mapToChar[i] = 0;
+        } else {
+            mapToChar[i] = count;
+            count++;
+            seq_new++;
+            counts_new[seq_new]=0;
+        }
+    }
+    for (i = 0; i < height; i++) {
+        for (j = 0; j < width; j++) {
+            var ids = j + i * width;
+            cluster[ids] = mapToChar[cluster[ids]];
+            counts_new[cluster[ids]]++;
+        }
+    }
+    console.log(counts_new);
+    return [cluster, seq_new,counts_new];
 }
 
 
@@ -70,6 +101,7 @@ function BFSearch(canvasData){
     matrix.data = new Array(height * width);
     var flags = new Array(height * width);
     var cluster = new Array(height * width);
+    var counts = [];
     var i, j,ids;
     for (i = 0; i < canvasData.height; i++) {
         for (j = 0; j < canvasData.width; j++) {
@@ -90,6 +122,7 @@ function BFSearch(canvasData){
             ids = j + i * width;
             if (matrix.data[ids] === 1 && !flags[ids]) {
                 seq++;
+                counts[seq] =0;
                 flags[ids] = true;
                 cluster[ids] = seq;
                 queue.push([i, j]);
@@ -103,6 +136,7 @@ function BFSearch(canvasData){
                         if ((ni < height) && (ni >= 0) && (nj < width) && (nj >= 0) && (matrix.data[nids] === 1) && (!flags[nids])) {
                             flags[nids] = true;
                             cluster[nids] = seq;
+                            counts[seq]++;
                             queue.push([ni, nj]);
                         }
                     }
@@ -110,7 +144,7 @@ function BFSearch(canvasData){
             }
         }
     }
-    return [cluster, seq];
+    return [cluster, seq, counts];
 }
 
 function BFSearchWithMask(canvasData,mask){
@@ -142,19 +176,19 @@ function BFSearchWithMask(canvasData,mask){
     for (i = 0; i < height; i++) {
         for (j = 0; j < width; j++) {
             ids = j + i * width;
-            if (matrix.data[ids] == 1 && !flags[ids]) {
+            if (matrix.data[ids] === 1 && !flags[ids]) {
                 seq++;
                 flags[ids] = true;
                 cluster[ids] = seq;
                 queue.push([i, j]);
-                while (queue.length != 0) {
+                while (queue.length !== 0) {
                     var k, nj, ni, nids;
                     var pot = queue.shift();
                     for (k = 0; k < 4; k++) {
                         ni = pot[0] + dirs[k][0];
                         nj = pot[1] + dirs[k][1];
                         nids = nj + ni * width;
-                        if ((ni < height) && (ni >= 0) && (nj < width) && (nj >= 0) && (matrix.data[nids] == 1) && (!flags[nids])) {
+                        if ((ni < height) && (ni >= 0) && (nj < width) && (nj >= 0) && (matrix.data[nids] === 1) && (!flags[nids])) {
                             flags[nids] = true;
                             cluster[nids] = seq;
                             queue.push([ni, nj]);
@@ -335,7 +369,7 @@ function dotSets(length, width, height) {
             left = dataset.area[0];
             right = dataset.area[1];
             for (j = left; j <= right; j++) {
-                if (flags[j] == 0) {
+                if (flags[j] === 0) {
                     flags[j] = i;
                 } else {
                     uf.union(i, flags[j]);
@@ -345,7 +379,7 @@ function dotSets(length, width, height) {
         }
         var id = uf.id;
         for (i = 1; i < id.length; i++) {
-            if (id[i] != i) {
+            if (id[i] !== i) {
                 this.data[id[i]].data = this.data[id[i]].data.concat(this.data[i].data);
                 this.data[i].data = [];
             }
@@ -369,7 +403,7 @@ function dotSets(length, width, height) {
     };
 
     this.swap = function (n, pos) {    //交换两个区域
-        if (n != pos)  {
+        if (n !== pos)  {
             var temp = this.data[n];
             this.data[n] = this.data[pos];
             this.data[pos] = temp;
@@ -453,7 +487,7 @@ function dotSets(length, width, height) {
         }
         var i;
         for(i=0;i<mask.length;i++){
-            if(mask[i]==1){
+            if(mask[i]===1){
                 mask[i]=255;
             }
         }
@@ -626,7 +660,7 @@ function dataSet(width, height) {
         var i, pot;
         for (i = 0; i < this.length; i++) {
             pot = this.data[i];
-            if (pot[0] == x && (pot[1] <= endY) && (pot[1] >= startY)) {
+            if (pot[0] === x && (pot[1] <= endY) && (pot[1] >= startY)) {
                 calCloumnNum++;
             }
         }
@@ -643,7 +677,7 @@ function dataSet(width, height) {
         var i, pot;
         for (i = 0; i < this.length; i++) {
             pot = this.data[i];
-            if (pot[1] == y && (pot[0] <= endX) && (pot[0] >= startX)) {
+            if (pot[1] === y && (pot[0] <= endX) && (pot[0] >= startX)) {
                 calRowsNum++;
             }
         }
@@ -657,7 +691,7 @@ function dataSet(width, height) {
         var i, pot;
         for (i = 0; i < this.length; i++) {
             pot = this.data[i];
-            if (pot[1] == y && (pot[0] <= endX) && (pot[0] >= startX)) {
+            if (pot[1] === y && (pot[0] <= endX) && (pot[0] >= startX)) {
                 calRowsNum++;
             }
         }
