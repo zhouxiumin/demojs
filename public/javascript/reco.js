@@ -37,7 +37,7 @@ function recoImg(cvsIn, resname, debug) {
     console.log('margins len:' + margins.length);
     var rand = Math.ceil( Math.random() * margins.length - 1);
     console.log('rand:' + rand);
-    rand =2;
+    rand =0;
     var names = {
         0:'汉沽分局',
         1:'生态城分局',

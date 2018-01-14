@@ -98,7 +98,7 @@ function margin2coordinates(margin, width, height) {
 }
 function traverse(margin, flags, width, height, i, j, cors) {
     // var dirs = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
-    var dirs = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]];
+    var dirs = [[0, -1], [1, 0], [0, 1], [-1, 0], [1, -1], [1, 1], [-1, 1], [-1, -1]];
     cors.push([j, i]);
     flags[i][j] = true;
     var di, dj, dir, ids;
