@@ -30,35 +30,71 @@ function recoImg(cvsIn, resname, debug) {
     console.log(searchSobel);
     console.log(setsSobel);
     drawCluster(clusterSobel, "test", seqSobel);
-    if(setsSobel.length<=2){
-        if(setsSobel.length<=1){
-            $(resname).text("unable to parse Image");
-            return;
-        }
-        console.log("finish filter sobel");
-    }else{
-        console.log("continue filter sobel");
-        setsSobel.SelectAreaSobel()
-    }
-/*
-    //得到数字区域的大小：
-    var digialArea = setsSobel.data[1].area;
-    setsSobel.show(true);
 
-    clusterSobel = setsSobel.fillSobel();
-    var mask = setsSobel.getMask(clusterSobel);
-    //drawCluster(clusterSobel, "ctx", seqSobel);
-    //做掩码，把不需要的去掉
-    maskImage(canvasData,mask,width,height);
-    var algo = OTSUAlgorithm(canvasData);//存储结果
-    canvasData = algo[0];
-    if (debug) {
-        canvas = document.getElementById('test2');
-        ctx = canvas.getContext('2d');
-        ctx.putImageData(canvasData, 0, 0);
-        // drawCluster(clusterSobel, "test", seqSobel);
+
+    var margins = getMargin(clusterSobel, seqSobel, width, height);
+    console.log(margins);
+    var rand = Math.ceil( Math.random() * margins.length);
+    drawCluster(margins[rand], "test2", 1);
+    var marginsByPositions = transformMarginToPostions(margins, width, height);
+    console.log(marginsByPositions);
+}
+
+
+function transformMarginToPostions(margins, width, height) {
+    var i,j,k;
+    var ids;
+    var marginsByPostion = [];
+    for(k=0;k<margins.length;k++){
+        var cluster = margins[k];
+        var margin = [];
+        for (i = 0; i < height; i++) {
+            for (j = 0; j < width; j++) {
+                ids = j + i * width;
+                if (cluster[ids] !== 0){
+                    margin.push([i,j]);
+                }
+            }
+        }
+        marginsByPostion.push(margin);
     }
-    */
+    return marginsByPostion;
+}
+
+function getMargin(cluster, seq, width, height) {
+    var i,j,k,s;
+    // var dirs = [[-1, 0], [1, 0], [0, -1], [0, 1],[-1,-1],[-1,1],[1,-1],[1,1]];
+    var dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+    var margins = [];
+    var ni,nj;
+    var ids,idsn;
+    var cluster_margin;
+    for(k=1;k<=seq;k++) {
+        cluster_margin = new Array(height * width);
+        for (i = 0; i < height; i++) {
+            for (j = 0; j < width; j++) {
+                ids = j + i * width;
+                cluster_margin[ids] = 0;
+            }
+        }
+        for (i = 0; i < height; i++) {
+            for (j = 0; j < width; j++) {
+                ids = j + i * width;
+                if (cluster[ids] === k){
+                    for(s=0;s<dirs.length;s++){
+                        ni = i + dirs[s][0];
+                        nj = j + dirs[s][1];
+                        idsn = nj + ni * width;
+                        if (cluster[idsn] === 0){
+                            cluster_margin[idsn] = 1;
+                        }
+                    }
+                }
+            }
+        }
+        margins.push(cluster_margin);
+    }
+    return margins;
 }
 
 function MergeSmallClusters(searchResult ,width, height) {
@@ -72,7 +108,7 @@ function MergeSmallClusters(searchResult ,width, height) {
     var counts_new = [];
     counts_new[seq_new]=0;
     for(i=1;i<=seq;i++){
-        if(counts[i]<20){
+        if(counts[i]<20 || i===1){
             mapToChar[i] = 0;
         } else {
             mapToChar[i] = count;
