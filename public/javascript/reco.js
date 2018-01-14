@@ -16,7 +16,7 @@ function recoImg(cvsIn, resname, debug) {
         ctx = canvas.getContext('2d');
         ctx.putImageData(canvasData, 0, 0);
     }
-    console.log("resolution: "+resolution);
+    // console.log("resolution: "+resolution);
     var algo11 = OTSUAlgorithm(canvasData);//存储结果
     var sobelImageData = algo11[0];
 
@@ -27,17 +27,45 @@ function recoImg(cvsIn, resname, debug) {
     var seqSobel = searchSobel[1];
     var setsSobel = genSets(clusterSobel,seqSobel,width,height);
     setsSobel.filterSobelSimple();
-    console.log(searchSobel);
-    console.log(setsSobel);
+    // console.log(searchSobel);
+    // console.log(setsSobel);
     drawCluster(clusterSobel, "test", seqSobel);
 
 
     var margins = getMargin(clusterSobel, seqSobel, width, height);
-    console.log(margins);
-    var rand = Math.ceil( Math.random() * margins.length);
+    // console.log(margins);
+    console.log('margins len:' + margins.length);
+    var rand = Math.ceil( Math.random() * margins.length - 1);
+    console.log('rand:' + rand);
+    rand =2;
+    var names = {
+        0:'汉沽分局',
+        1:'生态城分局',
+        2:'塘沽分局',
+        3:'保税分局',
+        4:'高新分局',
+        5:'保税分局',
+        6:'开发分局',
+        7:'高新分局',
+        8:'高新分局',
+        9:'开发分局',
+        10:'天津港公安局',
+        11:'南疆治安分局',
+        12:'天津港公安局(长条)',
+        13:'天津港公安局(心型)',
+        14:'大港分局',
+        15:'港中分局',
+        16:'开发分局',
+        17:'南港分局'
+    };
     drawCluster(margins[rand], "test2", 1);
-    var marginsByPositions = transformMarginToPostions(margins, width, height);
-    console.log(marginsByPositions);
+    // var marginsByPositions = transformMarginToPostions(margins, width, height);
+    // console.log(marginsByPositions);
+    var mapInfo = bits2vector(margins, width, height);
+    console.log(mapInfo);
+    var geojson = converMapInfoToJson(mapInfo);
+    console.log(JSON.stringify(geojson) );
+
 }
 
 
@@ -124,7 +152,7 @@ function MergeSmallClusters(searchResult ,width, height) {
             counts_new[cluster[ids]]++;
         }
     }
-    console.log(counts_new);
+    // console.log(counts_new);
     return [cluster, seq_new,counts_new];
 }
 
