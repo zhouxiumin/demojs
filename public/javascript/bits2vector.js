@@ -25,7 +25,8 @@ function bits2vector(margins, width, height) {
     };
     var mapInfo = {};
     for (var i = 0; i < margins.length; i++) {
-        if (i === 2 || i === 14) {
+        // if (i === 2 || i === 14) {
+        if (false) {
             //复杂地图
         } else {
 
