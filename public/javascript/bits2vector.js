@@ -83,10 +83,10 @@ function margin2coordinates(margin, width, height) {
                     }
                 }
                 simplyCors.push(p3);
-                console.log(simplyCors);
+                // console.log(simplyCors);
 
                 for (var si = 0;si<simplyCors.length;si++) {
-                    simplyCors[si][0]  = simplyCors[si][0]/1000 + 10;
+                    simplyCors[si][0]  = simplyCors[si][0]/1000 * 1.3+ 10;
                     simplyCors[si][1] = simplyCors[si][1]/(-1000) - 10;
                 }
                 ret.push(simplyCors);
