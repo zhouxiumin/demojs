@@ -54,12 +54,24 @@ function margin2coordinates(margin, width, height, traverseAlgorithm) {
         }
     }
     var cors = [];
+    var area_count = 0;
     for (i = 0; i < height; i++) {
         for (j = 0; j < width; j++) {
             ids = j + i * width;
             if (margin[ids] !== 0 && !flags[i][j]) {
                 traverseAlgorithm(margin, flags, width, height, i, j, cors, 0);
+                area_count += 1;
+
+                console.log('area_count: '+area_count);
                 cors.push([cors[0][0], cors[0][1]]);
+                if (area_count === 2){
+                    var cors_new = [];
+                    for(var p=cors.length-1;p>=0;p--){
+                        cors_new.push(cors[p]);
+                    }
+                    cors = cors_new;
+                }
+
                 var p1, p2, p3;
                 var simplyCors = [];
                 p1 = cors[0];
