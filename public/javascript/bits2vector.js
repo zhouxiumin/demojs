@@ -25,22 +25,23 @@ function bits2vector(margins, width, height) {
     };
     var mapInfo = {};
     for (var i = 0; i < margins.length; i++) {
-        // if (i === 2 || i === 14) {
-        if (false) {
-            //复杂地图
-        } else {
 
-            var coordinates = margin2coordinates(margins[i], width, height);
-            mapInfo[i] = {
-                name: names[i],
-                coordinates: coordinates
-            };
+        var traverseAlgorithm = traverse;
+        if (i === 2){
+            traverseAlgorithm = traverse2;
         }
+
+        var coordinates = margin2coordinates(margins[i], width, height, traverseAlgorithm);
+        mapInfo[i] = {
+            name: names[i],
+            coordinates: coordinates
+        };
+
     }
     return mapInfo;
 }
 
-function margin2coordinates(margin, width, height) {
+function margin2coordinates(margin, width, height, traverseAlgorithm) {
     var i, j;
     var ids;
 
@@ -57,13 +58,13 @@ function margin2coordinates(margin, width, height) {
         for (j = 0; j < width; j++) {
             ids = j + i * width;
             if (margin[ids] !== 0 && !flags[i][j]) {
-                traverse(margin, flags, width, height, i, j, cors);
-                cors.push([cors[0][0],cors[0][1]]);
-                var p1,p2,p3;
+                traverseAlgorithm(margin, flags, width, height, i, j, cors, 0);
+                cors.push([cors[0][0], cors[0][1]]);
+                var p1, p2, p3;
                 var simplyCors = [];
                 p1 = cors[0];
                 p2 = cors[1];
-                for (var k =2;k<cors.length;k++){
+                for (var k = 2; k < cors.length; k++) {
                     p3 = cors[k];
 
                     var isSameLine = false;
@@ -74,9 +75,9 @@ function margin2coordinates(margin, width, height) {
                     var dy23 = p3[1] - p2[1];
                     isSameLine = dx12 * dy23 === dx23 * dy12;
 
-                    if (isSameLine){
+                    if (isSameLine) {
                         p2 = p3;
-                    }else {
+                    } else {
                         simplyCors.push(p1);
                         p1 = p2;
                         p2 = p3
@@ -85,9 +86,9 @@ function margin2coordinates(margin, width, height) {
                 simplyCors.push(p3);
                 // console.log(simplyCors);
 
-                for (var si = 0;si<simplyCors.length;si++) {
-                    simplyCors[si][0]  = simplyCors[si][0]/1000 * 1.3+ 10;
-                    simplyCors[si][1] = simplyCors[si][1]/(-1000) - 10;
+                for (var si = 0; si < simplyCors.length; si++) {
+                    simplyCors[si][0] = simplyCors[si][0] / 1000 * 1.3 + 10;
+                    simplyCors[si][1] = simplyCors[si][1] / (-1000) - 10;
                 }
                 ret.push(simplyCors);
                 cors = [];
@@ -96,7 +97,7 @@ function margin2coordinates(margin, width, height) {
     }
     return ret;
 }
-function traverse(margin, flags, width, height, i, j, cors) {
+function traverse(margin, flags, width, height, i, j, cors, count) {
     // var dirs = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
     var dirs = [[0, -1], [1, 0], [0, 1], [-1, 0], [1, -1], [1, 1], [-1, 1], [-1, -1]];
     cors.push([j, i]);
@@ -108,7 +109,34 @@ function traverse(margin, flags, width, height, i, j, cors) {
         dj = j + dir[1];
         ids = dj + di * width;
         if (di >= 0 && dj >= 0 && di < height && dj < width && margin[ids] !== 0 && !flags[di][dj]) {
-            traverse(margin, flags, width, height, di, dj, cors);
+            traverse(margin, flags, width, height, di, dj, cors, count);
+        }
+    }
+}
+
+function traverse2(margin, flags, width, height, i, j, cors,count) {
+    var dirs1 = [[0, -1], [1, 0], [0, 1], [-1, 0], [1, -1], [1, 1], [-1, 1], [-1, -1]]; // 逆时针-上下左右先
+    var dirs2 = [[0, -1], [-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1]]; // 顺时针 -开始左边
+    var dirs21 = [[-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1],[0, -1], [-1, -1] ]; // 顺时针
+
+    var dirs3 = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]]; // 逆时针
+
+    cors.push([j, i]);
+    flags[i][j] = true;
+    var di, dj, dir, ids;
+    count += 1;
+    var dirs = dirs21;
+    if ( count === 1){
+        dirs = dirs3;
+    }
+    // console.log(count);
+    for (var k = 0; k < dirs.length; k++) {
+        dir = dirs[k];
+        di = i + dir[0];
+        dj = j + dir[1];
+        ids = dj + di * width;
+        if (di >= 0 && dj >= 0 && di < height && dj < width && margin[ids] !== 0 && !flags[di][dj]) {
+            traverse2(margin, flags, width, height, di, dj, cors,count);
         }
     }
 }
@@ -125,7 +153,7 @@ function converMapInfoToJson(mapInfo) {
         var item = {
             "type": "Feature",
             "properties": {
-                "id": ''+ count,
+                "id": '' + count,
                 "name": value.name,
                 "childNum": 1
             },
@@ -135,7 +163,7 @@ function converMapInfoToJson(mapInfo) {
             }
         };
         geojson.features.push(item);
-        count ++;
+        count++;
     }
 
     return geojson;
