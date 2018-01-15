@@ -154,12 +154,11 @@ function converMapInfoToJson(mapInfo) {
             "type": "Feature",
             "properties": {
                 "id": '' + count,
-                "name": value.name,
-                "childNum": 1
+                "name": value.name
             },
             "geometry": {
-                "type": "Polygon",
-                "coordinates": value.coordinates
+                "type": "MultiPolygon",
+                "coordinates": [value.coordinates]
             }
         };
         geojson.features.push(item);
