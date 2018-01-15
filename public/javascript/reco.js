@@ -38,26 +38,6 @@ function recoImg(cvsIn, resname, debug) {
     var rand = Math.ceil( Math.random() * margins.length - 1);
     console.log('rand:' + rand);
     rand =2;
-    var names = {
-        0:'汉沽分局',
-        1:'生态城分局',
-        2:'塘沽分局',
-        3:'保税分局',
-        4:'高新分局',
-        5:'保税分局',
-        6:'开发分局',
-        7:'高新分局',
-        8:'高新分局',
-        9:'开发分局',
-        10:'天津港公安局',
-        11:'南疆治安分局',
-        12:'天津港公安局(长条)',
-        13:'天津港公安局(心型)',
-        14:'大港分局',
-        15:'港中分局',
-        16:'开发分局',
-        17:'南港分局'
-    };
     drawCluster(margins[rand], "test2", 1);
     // var marginsByPositions = transformMarginToPostions(margins, width, height);
     // console.log(marginsByPositions);
@@ -66,27 +46,6 @@ function recoImg(cvsIn, resname, debug) {
     var geojson = converMapInfoToJson(mapInfo);
     console.log(JSON.stringify(geojson) );
 
-}
-
-
-function transformMarginToPostions(margins, width, height) {
-    var i,j,k;
-    var ids;
-    var marginsByPostion = [];
-    for(k=0;k<margins.length;k++){
-        var cluster = margins[k];
-        var margin = [];
-        for (i = 0; i < height; i++) {
-            for (j = 0; j < width; j++) {
-                ids = j + i * width;
-                if (cluster[ids] !== 0){
-                    margin.push([i,j]);
-                }
-            }
-        }
-        marginsByPostion.push(margin);
-    }
-    return marginsByPostion;
 }
 
 function getMargin(cluster, seq, width, height) {
@@ -212,60 +171,6 @@ function BFSearch(canvasData){
     return [cluster, seq, counts];
 }
 
-function BFSearchWithMask(canvasData,mask){
-    var width = canvasData.width;
-    var height = canvasData.height;
-    var matrix = {
-        "size": {"width": width, "height": height}
-    };
-    matrix.data = new Array(height * width);
-    var flags = new Array(height * width);
-    var cluster = new Array(height * width);
-    var i, j,ids;
-    for (i = 0; i < canvasData.height; i++) {
-        for (j = 0; j < canvasData.width; j++) {
-            ids = j + i * canvasData.width;
-            var point = canvasData.data[ids * 4];
-            var mk = mask[ids];
-            matrix.data[ids] = (point === 0 &&mk===255) ? 1 : 0;
-            cluster[ids] = matrix.data[ids];
-            flags[ids] = false;
-
-        }
-    }
-
-    var seq = 0;
-    var dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
-    var queue = [];
-    //宽度优先搜索
-    for (i = 0; i < height; i++) {
-        for (j = 0; j < width; j++) {
-            ids = j + i * width;
-            if (matrix.data[ids] === 1 && !flags[ids]) {
-                seq++;
-                flags[ids] = true;
-                cluster[ids] = seq;
-                queue.push([i, j]);
-                while (queue.length !== 0) {
-                    var k, nj, ni, nids;
-                    var pot = queue.shift();
-                    for (k = 0; k < 4; k++) {
-                        ni = pot[0] + dirs[k][0];
-                        nj = pot[1] + dirs[k][1];
-                        nids = nj + ni * width;
-                        if ((ni < height) && (ni >= 0) && (nj < width) && (nj >= 0) && (matrix.data[nids] === 1) && (!flags[nids])) {
-                            flags[nids] = true;
-                            cluster[nids] = seq;
-                            queue.push([ni, nj]);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return [cluster, seq];
-}
-
 function drawCluster(cluster, canvasname, seqnum) {
     var canvascluster = document.getElementById(canvasname);
     var ctx = canvascluster.getContext('2d');
@@ -311,19 +216,6 @@ function genSets(cluster, seq, width, height) {
     }
     sets.flush();
     return sets;
-}
-
-function maskImage(canvasData,mask,width,height){
-    var i, j, k,gray;
-    for(i=0;i<height;i++){
-        for(j=0;j<width;j++){
-            k = j+ i*width;
-            gray = canvasData.data[4*k]&mask[k];
-            canvasData.data[4*k]=gray;
-            canvasData.data[4*k+1]=gray;
-            canvasData.data[4*k+2]=gray;
-        }
-    }
 }
 
 //集合
