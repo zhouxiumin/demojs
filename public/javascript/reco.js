@@ -1,3 +1,5 @@
+
+// 识别按钮动作--图片处理主要逻辑
 function recoImg(cvsIn, resname, debug) {
     var context = cvsIn.getContext('2d');
     var canvasData = context.getImageData(0, 0, cvsIn.width, cvsIn.height);
@@ -11,11 +13,11 @@ function recoImg(cvsIn, resname, debug) {
     // var sobelData = Sobel(canvasData);
     // var sobelImageData = sobelData.toImageData();
     var canvas,ctx;
-    if (false) {
-        canvas = document.getElementById('test1');
-        ctx = canvas.getContext('2d');
-        ctx.putImageData(canvasData, 0, 0);
-    }
+    // if (false) {
+    //     canvas = document.getElementById('test1');
+    //     ctx = canvas.getContext('2d');
+    //     ctx.putImageData(canvasData, 0, 0);
+    // }
     // console.log("resolution: "+resolution);
     var algo11 = OTSUAlgorithm(canvasData);//存储结果
     var sobelImageData = algo11[0];
