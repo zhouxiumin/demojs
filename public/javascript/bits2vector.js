@@ -7,20 +7,20 @@ function bits2vector(margins, width, height) {
         0: '汉沽分局',
         1: '生态城分局',
         2: '塘沽分局', // 复杂
-        3: '保税分局1',
-        4: '高新分局1',
-        5: '保税分局2',
+        3: '保税分局',
+        4: '高新分局 ',
+        5: '保税分局1',
         6: '开发分局',
-        7: '高新分局2',
-        8: '高新分局3',
-        9: '开发分局1',
+        7: '高新分局',
+        8: '高新分局1',
+        9: '开发分局 ',
         10: '天津港公安局',
         11: '南疆治安分局',
-        12: '天津港公安局(长条)',
-        13: '天津港公安局(心型)',
+        12: '天津港公安局 ',
+        13: '天津港公安局  ',
         14: '大港分局', // 复杂
         15: '港中分局',
-        16: '开发分局2',
+        16: '开发分局  ',
         17: '南港分局'
     };
     var mapInfo = {};
@@ -36,8 +36,18 @@ function bits2vector(margins, width, height) {
             name: names[i],
             coordinates: coordinates
         };
-
     }
+    // 合并相同区域
+    {
+        // 保税分局合并 -区域3和区域5
+        mapInfo[3].coordinates.push(mapInfo[5].coordinates[0]);
+        delete  mapInfo[5];
+
+        // 高新分局合并 -区域7和区域8
+        mapInfo[7].coordinates.push(mapInfo[8].coordinates[0]);
+        delete  mapInfo[8];
+    }
+
     return mapInfo;
 }
 
