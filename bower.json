@@ -18,9 +18,11 @@
     "tests"
   ],
   "dependencies": {
-    "echarts": "^3.6.2",
+    "echarts": "^3.7.1",
+    "echarts-ng": "hs-echarts-ng#^0.3.19",
     "jquery": "^3.2.1",
     "bootstrap": "^3.3.7",
-    "zrender": "^3.5.2"
+    "zrender": "^3.5.2",
+    "angular": "1.5.7"
   }
 }
