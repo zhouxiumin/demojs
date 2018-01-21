@@ -209,7 +209,7 @@ app.controller('myCtrl', function ($scope, $echarts) {
                 "onZero": true,
                 "onZeroAxisIndex": null
             },
-            "splitArea": {"show": true, "areaStyle": {"color": ["rgba(250,250,250,0.1)", "rgba(200,200,200,0.1)"]}},
+            "splitArea": {"show": false, "areaStyle": {"color": ["rgba(250,250,250,0.1)", "rgba(200,200,200,0.1)"]}},
             "boundaryGap": [0, 0],
             "splitNumber": 5,
             "show": true,
@@ -247,7 +247,7 @@ app.controller('myCtrl', function ($scope, $echarts) {
                 "onZero": true,
                 "onZeroAxisIndex": null
             },
-            "splitArea": {"show": true, "areaStyle": {"color": ["rgba(250,250,250,0.1)", "rgba(200,200,200,0.1)"]}},
+            "splitArea": {"show": false, "areaStyle": {"color": ["rgba(250,250,250,0.1)", "rgba(200,200,200,0.1)"]}},
             "splitLine": {"lineStyle": {"color": ["#eee"], "width": 1, "type": "solid"}, "show": true},
             "boundaryGap": [0, 0],
             "splitNumber": 5,
@@ -325,7 +325,7 @@ app.controller('myCtrl', function ($scope, $echarts) {
                     shadowColor: 'rgba(0, 0, 0, 0.4)',
                     shadowBlur: 20
                 }
-            },
+            }
         }],
         "markArea": [{
             "zlevel": 0,
