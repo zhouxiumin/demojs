@@ -6,16 +6,21 @@
 </head>
 <body ng-app="myApp">
 
-<div ng-controller="myCtrl" style="background-image:url('/img/sky.jpg');">
-    <div style="height: 160px;width:100%" echarts="DISTRIBUTION_ID" config="distribution"></div>
-
+<div ng-controller="BinhaihulianwangCtrl" style="background-image:url('/img/sky.jpg');">
+    <attack-trend-map param="param"></attack-trend-map>
 </div>
 
 <script src="/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="/bower_components/angular/angular.min.js"></script>
+<script src="/bower_components/angular-resource/angular-resource.min.js"></script>
+<script src="/bower_components/moment/min/moment.min.js"></script>
 <script src="/bower_components/echarts/dist/echarts.js"></script>
 <script src="/bower_components/echarts-ng/dist/echarts-ng.js"></script>
-<script src="/javascript/echarts/transapp.js"></script>
+<script src="/javascript/ngtrans/transapp.js"></script>
+<script src="/javascript/ngtrans/modules/trend/factory/util.js"></script>
+<script src="/javascript/ngtrans/modules/trend/service/binhaihulianwang.srv.js"></script>
+<script src="/javascript/ngtrans/modules/trend/controller/binhaihulianwang.js"></script>
+<script src="/javascript/ngtrans/modules/trend/directive/attack-trend-map.js"></script>
 
 
 </body>
