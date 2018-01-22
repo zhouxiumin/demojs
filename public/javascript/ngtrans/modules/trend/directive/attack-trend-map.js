@@ -8,14 +8,12 @@
 app.directive("attackTrendMap",function(){
     return{
         restrict:'E',
-        scope:{},
+        scope:{mapParam:'='},
         replace:false,
         template: '<div style="height: 160px;width:100%" echarts="mapChart.id" config="mapChart.config"></div>',
         controller:function ($scope,$attrs, Util, $echarts, BinhaihulianwangService) {
-            console.log($attrs);
-            $scope.param = $attrs.param;
-            console.log($scope.param);
-
+            // console.log($attrs);
+            // console.log($scope.mapParam);
             Object.assign($scope, {
                 // 地图
                 mapChart: {
@@ -114,14 +112,8 @@ app.directive("attackTrendMap",function(){
                         });
                     }
                 },
-
             });
-
-            let param = {
-                from: 1513132488541,
-                to: 1513737288542
-            };
-            $scope.mapChart.load(param);
+            $scope.mapChart.load($scope.mapParam);
         }
     };
 });
