@@ -7,7 +7,7 @@ app.directive("hoursTrend",[
             restrict:'E',
             scope:{mapParam:'='},
             replace:false,
-            template: '<div style="height: 160px;width:1024px" echarts="mapChart.id" config="mapChart.config"></div>',
+            template: '<div style="height: 160px;width:100%" echarts="mapChart.id" config="mapChart.config"></div>',
             controller:function ($scope) {
                 Object.assign($scope, {
                     // 地图
