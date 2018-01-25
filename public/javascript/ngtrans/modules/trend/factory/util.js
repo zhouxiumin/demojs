@@ -5,8 +5,10 @@
 app.factory('Util', function() {
     let service = {};
     // uuid
+    let count =0;
     service.uuid = function(){
-        return '1';
+        count += 1;
+        return count.valueOf();
     };
     return service;
 });

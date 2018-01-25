@@ -22,7 +22,7 @@
     "echarts-ng": "hs-echarts-ng#^0.3.19",
     "jquery": "^3.2.1",
     "bootstrap": "^3.3.7",
-    "zrender": "^3.5.2",
+    "zrender": "^3.7.4",
     "angular": "1.5.7",
     "angular-resource": "1.5.7",
     "moment": "^2.20.1"

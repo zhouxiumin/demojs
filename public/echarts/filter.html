@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ask遮罩蒙版</title>
+</head>
+<style>
+    .back {background:url(../img/sky.jpg) no-repeat;height: 200px}
+    .top {height:100px;background-color:#fff;filter:Alpha(Opacity=60);opacity:0.6;}
+    .mask {-webkit-mask-image:url('../img/mask.png');width:100%;height:auto}
+</style>
+<body>
+<div class="back">
+    <div class="top"></div>
+</div>
+<img class="mask" src="../img/sky.jpg">
+</body>
+</html>

@@ -108,10 +108,10 @@ app.directive("hoursTrend",[
                         }
                     },
                 });
-                $scope.mapChart.load($scope.mapParam);
             },
             link:function (scope) {
                 console.log(scope);
+                scope.mapChart.load(scope.mapParam);
 
                 scope.$watch('param.time.starTime', function(newVal, oldVal) {
                     scope.mapChart.load(scope.mapParam);
